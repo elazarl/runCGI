@@ -1,0 +1,9 @@
+_inherit: inherit_test2.yaml
+method: get
+VAR: v
+_exec: ruby
+_args: cgi.rb
+
+expect:
+  - name(1)Q
+  - VAR(v)E

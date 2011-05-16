@@ -1,0 +1,3 @@
+_inherit: inherit_lvl2_test2.yaml
+query_string:
+  name: 1

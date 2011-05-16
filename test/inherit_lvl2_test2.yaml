@@ -1,0 +1,3 @@
+method: post
+query_string:
+  x: 1

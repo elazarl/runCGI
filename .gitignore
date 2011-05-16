@@ -1,0 +1,10 @@
+*.o
+*.a
+runCGI
+*.d
+Default
+.cproject
+.project
+*~
+*.pyc
+myconf.mk

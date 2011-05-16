@@ -1,0 +1,12 @@
+VAR: v
+query_string:
+  name: 1
+_exec: ruby
+_args:
+  - -I
+  - /opt
+  - cgi.rb
+method: get
+expect:
+  - VAR(v)E
+  - name(1)Q

@@ -1,0 +1,12 @@
+query_string:
+  name: a<%=p%>
+  <%=q%>: <%= p  %>
+_exec: ruby
+_args: cgi.rb
+method: POST
+runcgi_params:
+  - -p p=1
+  - -p q=2
+expect:
+  - name(a1)Q
+  - 2(1)Q

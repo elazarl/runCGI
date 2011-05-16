@@ -1,0 +1,84 @@
+== runCGI ==
+
+runCGI was written for testing purposes. It's input is a
+YAML[1] file, describing a CGI execution. It would try to
+execute the CGI script, like the server would. Setting the
+required environment variables, etc.
+
+That way, it's easier to debug CGI scenerio, as well as
+testing a certain CGI scripts with a known and well defined
+request.
+
+You might argue that in 2011, CGI is a bit dated, apparantly
+there are still software packages who uses that, and I hope
+it'll be for the benefit of even one frustrated programmer
+who must work on a heap of legacy code.
+
+== Usage Example ==
+
+Let's assume I'm having a cgi script in /var/cgi-bin/a.cgi
+and I want to run a POST query to it with variable q set
+to 1. I'll write a YAML file
+
+    $ cat postq.yaml
+    method: post
+    _exec: /var/cgi-bin/a.cgi
+    query_string:
+      q: 1
+
+Then I'll execute it with runCGI
+
+    $ runCGI postq.yaml
+
+Hopefully, `runCGI` will execute `a.cgi` just like Apache
+would. It can even work with scripts. If the default
+environment variables aren't good enough for your cgi
+program, set them in the topmost level of the cgi.
+
+    ENV_VARIABLE: env_variable_value
+    _exec: ruby
+    _args:
+      - -I/opt
+      - cgi.rb
+
+See the `test/` directory for more usage examples.
+
+== Running Multiple cgi scripts ==
+
+If multiple yaml files are supplied to `runCGI`, it
+would execute them in parallel and redirect output
+to `/dev/null`, assuming you intend to run them all
+for a specific side effect.
+
+== Portability ==
+
+Currently it is known to work in Linux only. However I
+tried to make it as portable as I could. I assumed a
+POSIX environment.
+
+Portability issues:
+
+1. path separators in `paths.h` should be overrided
+   for windows.
+
+2. `/dev/null` should be overrided for Windows, or
+   use a different approach altogether.
+
+3. POSIX layers that should be emulated in Windows
+   include execv, getenv, basedir/basename (I
+   actually intend to get rid of this dependency in 
+   the near future).
+
+== Todo ==
+
+1. Add support for files upload.
+
+2. Make runCGI compilable with mingw
+
+== Known bugs ==
+
+All parameters starting with underscore (`_`) in the
+outermost YAML file, will be treated as configuration
+and will not be treated as environment varaible.
+
+[1] http://yaml.org
